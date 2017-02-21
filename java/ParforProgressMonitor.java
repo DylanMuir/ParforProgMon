@@ -157,7 +157,7 @@ public class ParforProgressMonitor {
                         fBar.setValue( fStep*newVal );
                         double percentage = 100.0*fStep*newVal/fN;
                         fFrame.setTitle(title + (int)percentage + "% completed.");
-                        if ( newVal == fBar.getMaximum() ) {
+                        if ( fStep*newVal >= fBar.getMaximum() ) {
                             done();
                         }
                     }

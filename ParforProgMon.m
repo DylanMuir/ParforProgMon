@@ -10,14 +10,15 @@
 % window. 'nNumIterations' is an integer with the total number of
 % iterations in the loop.
 %
-% <strong>Optional arguments</strong>
-% 'nProgressStepSize' specifies to update the progress bar every time this
-% number of steps passes. 'nWidth' and 'nHeight' specify the size of the
-% progress window.
+% <strong>Optional arguments</strong> 'nProgressStepSize' specifies how
+% many loop iterations should correspond to a single call to 'increment()'.
+% 'nWidth' and 'nHeight' specify the size of the progress window.
 %
 % <strong>Within the parfor loop</strong>
 % parfor (nIndex = 1:nNumIterations)
-%    ppm.increment();
+%    if (mod(nIndex, nProgressStepSize) == 0)
+%       ppm.increment();
+%    end
 % end
 %
 % Modified from <a href="https://www.mathworks.com/matlabcentral/fileexchange/31673-parfor-progress-monitor-v2">ParforProgMonv2</a>.
@@ -54,9 +55,10 @@ classdef ParforProgMon < handle
          % 'strWindowTitle' is a string containing the title of the
          % progress bar window. 'nNumIterations' is an integer with the
          % total number of iterations in the loop. 'nProgressStepSize'
-         % indicates after how many iterations progress is shown. 'nWidth'
-         % indicates the width of the progress window. 'nHeight' indicates
-         % the width of the progress window.
+         % indicates that one update (call to 'increment') corresponds to
+         % this many iterations. 'nWidth' indicates the width of the
+         % progress window. 'nHeight' indicates the width of the progress
+         % window.
          
          % - Are we a worker or a server?
          if ((nargin == 1) && iscell(strWindowTitle))
