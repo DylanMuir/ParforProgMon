@@ -81,10 +81,10 @@ classdef ParforProgMon < handle
                nProgressStepSize = 1;
             end
             
-            if (~exist('nWidth', 'var'))
-               nWidth = 300;
+            if (~exist('nWidth', 'var') || ~exist('nHeight', 'var') || isempty(nHeight) || isempty(nWidth))
+               nWidth = 400;
                nHeight = 80;
-            end
+            end               
             
             % Check for an existing pool
             pPool = gcp('nocreate');
