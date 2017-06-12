@@ -68,7 +68,9 @@ classdef ParforProgMon < handle
             % fprintf('Worker: Attached files folder on worker is [%s]\n', o.strAttachedFilesFolder);
                         
             % Add to java path
+            w = warning('off', 'MATLAB:Java:DuplicateClass');
             javaaddpath(o.strAttachedFilesFolder);
+            warning(w);
             
             % "Private" constructor used on the workers
             o.JavaBit   = ParforProgressMonitor.createWorker(strWindowTitle{1}, strWindowTitle{2});
@@ -97,10 +99,16 @@ classdef ParforProgMon < handle
             strPath = fileparts(which('ParforProgMon'));
             o.strAttachedFilesFolder = fullfile(strPath, 'java');
             % fprintf('Server: JAVA class folder is [%s]\n', o.strAttachedFilesFolder);
+            w = warning('off', 'MATLAB:Java:DuplicateClass');
             javaaddpath(o.strAttachedFilesFolder);
+            warning(w);
             
-            % Distribute class to pool            
-            pPool.addAttachedFiles(o.strAttachedFilesFolder);
+            % Distribute class to pool
+            if (ismember(pPool.AttachedFiles, o.strAttachedFilesFolder))
+               pPool.updateAttachedFiles();
+            else
+               pPool.addAttachedFiles(o.strAttachedFilesFolder);
+            end
             
             % Normal construction
             o.JavaBit   = ParforProgressMonitor.createServer( strWindowTitle, nNumIterations, nProgressStepSize, nWidth, nHeight );
