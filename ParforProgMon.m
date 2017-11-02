@@ -4,7 +4,7 @@
 % Begin by creating a parallel pool.
 %
 % Then construct a <a href="matlab:help ParforProgMon">ParforProgMon</a> object:
-% ppm = <a href="matlab:help ParforProgMon">ParforProgMon</a>(strWindowTitle, nNumIterations <, nProgressStepSize, nWidth, nHeight>);
+% ppm = <a href="matlab:help ParforProgMon">ParforProgMon</a>(strWindowTitle, nNumIterations <, nProgressStepSize, nWidth, nHeight, nMinIterations>);
 %
 % 'strWindowTitle' is a string containing the title of the progress bar
 % window. 'nNumIterations' is an integer with the total number of
@@ -47,7 +47,7 @@ classdef ParforProgMon < handle
    end
    
    methods
-      function o = ParforProgMon(strWindowTitle, nNumIterations, nProgressStepSize, nWidth, nHeight)
+      function o = ParforProgMon(strWindowTitle, nNumIterations, nProgressStepSize, nWidth, nHeight, nMinIterations)
          % ParforProgMon - CONSTRUCTOR Create a ParforProgMon object
          % 
          % Usage: ppm = ParforProgMon(strWindowTitle, nNumIterations <, nProgressStepSize, nWidth, nHeight>)
@@ -59,6 +59,10 @@ classdef ParforProgMon < handle
          % this many iterations. 'nWidth' indicates the width of the
          % progress window. 'nHeight' indicates the width of the progress
          % window.
+         
+         if (~exist('nMinIterations', 'var') || isempty(nMinIterations))
+            nMinIterations = 0;
+         end
          
          % - Are we a worker or a server?
          if ((nargin == 1) && iscell(strWindowTitle))
@@ -76,10 +80,10 @@ classdef ParforProgMon < handle
             o.JavaBit   = ParforProgressMonitor.createWorker(strWindowTitle{1}, strWindowTitle{2});
             o.Port      = [];
             
-         elseif (nargin > 1)
+         elseif (nargin > 1) && (nNumIterations >= nMinIterations)
             % - Server constructor
             % Check arguments
-            if (~exist('nProgressStepSize', 'var'))
+            if (~exist('nProgressStepSize', 'var') || isempty(nProgressStepSize))
                nProgressStepSize = 1;
             end
             
