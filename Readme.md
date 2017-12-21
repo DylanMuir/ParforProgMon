@@ -1,6 +1,8 @@
 # Parfor progress monitor
 <img align="right" src="https://github.com/DylanMuir/ParforProgMon/raw/master/progress_bar.png" />
+
 ## A Java-based `Matlab` class for progress monitoring during a `parfor` loop
+
 ### Usage
 Begin by creating a parallel pool.
  
