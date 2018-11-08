@@ -144,6 +144,10 @@ classdef ParforProgMon < handle
       function delete( o )
          % delete - METHOD Delete a ParforProgMon object
          
+         % - Make sure that any other threads that may have closed 
+         %   the UI down have a chance to do it first
+         pause(.01);
+         
          % Close the UI
          if (~isempty(o.JavaBit))
             o.JavaBit.done();
